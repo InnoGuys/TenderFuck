@@ -19,7 +19,25 @@ import torch
 #     return HttpResponse("You're looking at question %s." % request.GET.get("customer_id")) # % customer_id
 
 def scu(request):
-    return HttpResponse("SCU")
+    engine = db.create_engine('sqlite:///databases/scu.sqlite3')
+    connection = engine.connect()
+    metadata = db.MetaData()
+    table = db.Table('Запрос1', metadata, autoload=True, autoload_with=engine)
+
+    if not request.GET.get("id") is None:
+
+        id_scu = int(request.GET.get("id"))
+        print(id_scu)
+
+        # Equivalent to 'SELECT * FROM table WHERE ID_СТЕ = <id>'
+        query = db.select([table]).where(table.columns.ID_СТЕ == id_scu)
+        print(table.columns.ID_СТЕ)
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchall()
+
+        return HttpResponse(str(ResultSet))
+
+    return HttpResponse("need param 'id' like '?id=<INTEGER>'")
 
 
 def contracts(request):
