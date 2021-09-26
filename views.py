@@ -2,9 +2,16 @@ import syslog
 
 from django.http import HttpResponse
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authtoken.models import Token
+
 import sqlalchemy as db
 
-import json
+import torch
 
 
 # from django.shortcuts import render
@@ -17,6 +24,9 @@ import json
 # def detail(request):
 #     request.GET.get("customer_id")
 #     return HttpResponse("You're looking at question %s." % request.GET.get("customer_id")) # % customer_id
+
+def test(request):
+    return HttpResponse("STRING EXAMPLE", content_type="text/plain")
 
 def scu(request):
     engine = db.create_engine('sqlite:///databases/scu.sqlite3')
@@ -60,7 +70,8 @@ def scu(request):
 
     return HttpResponse("need param 'id' like '?id=<INTEGER>'")
 
-
+@api_view(['GET'])
+# @permission_classes(['GET'])
 def contracts(request):
     engine = db.create_engine('sqlite:///databases/contracts.sqlite3')
     connection = engine.connect()
@@ -144,4 +155,4 @@ def contracts(request):
 
     else:
 
-        return HttpResponse("need params as customer_tin like '?customer_tin=<INTEGER>'")
+        return ("need params as customer_tin like '?customer_tin=<INTEGER>'")

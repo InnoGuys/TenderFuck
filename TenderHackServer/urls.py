@@ -19,7 +19,8 @@ import views
 
 urlpatterns = [
     # ex: /polls/
-
+    # path('', views.test, name='test'),
+    path('api', views.test, name='test'),
     path('api/scu', views.scu, name='scu'),
     path('api/contracts', views.contracts, name='contracts'),
     # path('', views.index, name='index'),
