@@ -6,7 +6,7 @@
 ## ...если коротко, то
 
 * SentenceTransformers
-* [Модель для русского языка от Сбера] (https://huggingface.co/sberbank-ai/sbert_large_nlu_ru)
+* [Модель для русского языка от Сбера](https://huggingface.co/sberbank-ai/sbert_large_nlu_ru)
 * NumPy
 * Pandas
 
