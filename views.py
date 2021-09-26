@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 import sqlalchemy as db
 
-import torch
+import json
 
 
 # from django.shortcuts import render
@@ -25,7 +25,6 @@ def scu(request):
     table = db.Table('Запрос1', metadata, autoload=True, autoload_with=engine)
 
     if not request.GET.get("id") is None:
-
         id_scu = int(request.GET.get("id"))
         print(id_scu)
 
@@ -35,7 +34,29 @@ def scu(request):
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchall()
 
-        return HttpResponse(str(ResultSet))
+        keys = table.columns.keys()
+
+        # print(keys)
+
+        sep = ","
+        response_msg = "{"
+        for a in ResultSet:
+            li = list(a)
+            response_msg += '"' + "id" + str(li[0]) + '"' + ":" + "{"
+            for idx_b in range(len(li[:-1])):
+                response_msg += '"' + str(keys[idx_b]) + '"' + ":" + '"' + (
+                    str(li[idx_b]).replace('"', "'")) + '"' + sep
+            response_msg += '"' + str(keys[-1]) + '"' + ":" + '"' + (
+                str(li[-1]).replace('"', "'").replace(',', ';')) + '"' + sep
+            response_msg = response_msg[:-len(sep)]
+            response_msg += "}" + sep
+
+        response_msg = response_msg[:-len(sep)]
+        response_msg += "}"
+
+        response_msg = response_msg.replace(" ", "")
+
+        return HttpResponse(response_msg, content_type="application/json")
 
     return HttpResponse("need param 'id' like '?id=<INTEGER>'")
 
@@ -89,15 +110,37 @@ def contracts(request):
             result = ResultSet[statLine:endLine]
 
         print("result: " + str(result))
-        response_msg = '{'
-        for line in result:
-            response_msg = response_msg + str(line) + "\n"
-        response_msg = response_msg + '}'
-        # response_msg = '\n'  # '\n' is divider
-        # response_msg.join(result)  # response_msg looks like 'response1\nresponse2\nresponse3'...
-        print("response_msg" + str(response_msg))
 
-        return HttpResponse(response_msg)
+        for idx in range(len(result)):
+            result[idx] = list(result[idx])
+
+        # print(json.dumps(result))
+        # return HttpResponse(json.dumps(result))
+
+        keys = table.columns.keys()
+
+        # print(keys)
+
+        sep = ","
+        response_msg = "{"
+        for a in ResultSet:
+            li = list(a)
+            response_msg += '"' + "id" + str(li[0]) + '"' + ":" + "{"
+            for idx_b in range(len(li[:-1])):
+                response_msg += '"' + str(keys[idx_b]) + '"' + ":" + '"' + (str(li[idx_b]).replace('"', "'")) + '"' + sep
+            response_msg += '"' + str(keys[-1]) + '"' + ":" + '"' + (str(li[-1]).replace('"', "'").replace(',', ';')) + '"' + sep
+            response_msg = response_msg[:-len(sep)]
+            response_msg += "}" + sep
+
+        response_msg = response_msg[:-len(sep)]
+        response_msg += "}"
+
+        response_msg = response_msg.replace(" ", "")
+
+        # print("response_msg" + str(response_msg))
+
+        return HttpResponse(response_msg, content_type="application/json")
+
 
     else:
 

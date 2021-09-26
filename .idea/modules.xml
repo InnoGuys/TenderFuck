@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/TenderHackServer.iml" filepath="$PROJECT_DIR$/.idea/TenderHackServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/TenderHack.iml" filepath="$PROJECT_DIR$/.idea/TenderHack.iml" />
     </modules>
   </component>
 </project>
